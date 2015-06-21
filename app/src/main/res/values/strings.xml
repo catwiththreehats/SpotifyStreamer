@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Spotify Streamer</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="artist_search_hint">Search for your favorite musicians...</string>
+    <string name="artist_search_no_results">No results found. Please refine your search.</string>
+    <string name="title_activity_artist_top10">Top 10 Tracks</string>
+    <string name="topten_tracks_no_result">No top tracks could be found</string>
+    <string name="error_fetching_spotify_data">Error fetching data</string>
+</resources>
