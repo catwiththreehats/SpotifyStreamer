@@ -1,4 +1,4 @@
-package com.fivedimensionlabs.android.spotifystreamer;
+package com.fivedimensionlabs.android.spotifystreamer.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.fivedimensionlabs.android.spotifystreamer.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -15,8 +16,13 @@ import java.util.List;
 import kaaes.spotify.webapi.android.models.Artist;
 
 public class ArtistCustomAdapter extends BaseAdapter {
-    List<Artist> artistList;
-    LayoutInflater layoutInflater;
+    private List<Artist> artistList;
+    private LayoutInflater layoutInflater;
+
+    public class ViewHolder {
+        public TextView textView;
+        public ImageView imageView;
+    }
 
     public ArtistCustomAdapter(Context context, List<Artist> artists) {
         artistList = artists;
@@ -40,20 +46,28 @@ public class ArtistCustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View listItemView = layoutInflater.inflate(R.layout.list_item_artist, null);
 
-        Artist artist = artistList.get(position);
+        ViewHolder viewHolder;
 
-        TextView textView = (TextView)listItemView.findViewById(R.id.listitem_artist_textView);
-        textView.setText(artist.name);
+        if (convertView==null) {
+            convertView = layoutInflater.inflate(R.layout.list_item_artist, parent, false);
 
-        ImageView imageView = (ImageView)listItemView.findViewById(R.id.listitem_artist_imageview);
-
-        if (artist.images.size()>0) {
-            Picasso.with(layoutInflater.getContext()).load(artist.images.get(0).url).into(imageView);
+            viewHolder = new ViewHolder();
+            viewHolder.textView = (TextView)convertView.findViewById(R.id.listitem_artist_textView);
+            viewHolder.imageView = (ImageView)convertView.findViewById(R.id.listitem_artist_imageview);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        return listItemView;
+        Artist artist = artistList.get(position);
+        viewHolder.textView.setText(artist.name);
+
+        if (artist.images.size() > 0) {
+            Picasso.with(layoutInflater.getContext()).load(artist.images.get(0).url).into(viewHolder.imageView);
+        }
+
+        return convertView;
     }
 
     public void clear() {

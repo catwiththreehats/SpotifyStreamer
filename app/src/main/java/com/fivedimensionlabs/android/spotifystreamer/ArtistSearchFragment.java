@@ -4,17 +4,17 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.fivedimensionlabs.android.spotifystreamer.adapters.ArtistCustomAdapter;
+import com.fivedimensionlabs.android.spotifystreamer.helpers.NetworkUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +28,9 @@ import kaaes.spotify.webapi.android.models.ArtistsPager;
 public class ArtistSearchFragment extends Fragment {
 
     private final String LOG_TAG = ArtistSearchFragment.class.getSimpleName();
-
     private ArtistCustomAdapter artistsAdapter;
-
     private static List<Artist> artistList;
-
     private FetchArtistResultsTask fetchArtistsTask;
-
-    private EditText editTextSearchArtist;
-
-    private static String lastSearchString = "";
 
     public ArtistSearchFragment() {
     }
@@ -46,35 +39,43 @@ public class ArtistSearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_artist_search, container, false);
 
-        editTextSearchArtist = (EditText)rootView.findViewById(R.id.edittext_artist_search);
+        final SearchView searchText = (SearchView) rootView.findViewById(R.id.searchview_artist_search);
 
-        editTextSearchArtist.setText(lastSearchString);
+        searchText.setIconifiedByDefault(false);
+        searchText.setQueryHint(getResources().getString(R.string.artist_search_hint));
+        searchText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
 
-        editTextSearchArtist.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                            String searchString = v.getText().toString();
-                            if (fetchArtistsTask!=null) {
-                                fetchArtistsTask.cancel(true);
-                            }
-                            fetchArtistsTask = new FetchArtistResultsTask();
-                            fetchArtistsTask.execute(searchString);
-                            lastSearchString = searchString;
-                        }
-                        return false;
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String searchString = searchText.getQuery().toString();
+                if (NetworkUtility.hasNetworkConnectivity(getActivity())) {
+                    if (fetchArtistsTask != null) {
+                        fetchArtistsTask.cancel(true);
                     }
-                });
+                    fetchArtistsTask = new FetchArtistResultsTask();
+                    fetchArtistsTask.execute(searchString);
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show();
+                    artistsAdapter.clear();
+                }
+                return false;
+            }
+        });
 
-        if (artistList==null) {
+        if (artistList == null)
+        {
             artistList = new ArrayList<Artist>();
         }
 
         artistsAdapter = new ArtistCustomAdapter(getActivity(), artistList);
 
-        ListView listView = (ListView)rootView.findViewById(R.id.listview_artists);
+        ListView listView = (ListView) rootView.findViewById(R.id.listview_artists);
         listView.setAdapter(artistsAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -96,7 +97,7 @@ public class ArtistSearchFragment extends Fragment {
 
         @Override
         protected List<Artist> doInBackground(String... params) {
-            if (params==null || params.length==0 || params[0].length()==0) {
+            if (params == null || params.length == 0 || params[0].length() == 0) {
                 return null;
             }
 
@@ -124,7 +125,7 @@ public class ArtistSearchFragment extends Fragment {
                 return;
             }
 
-            if (artists==null || artists.size()==0) {
+            if (artists == null || artists.size() == 0) {
 
                 Toast toast = Toast.makeText(getActivity(), R.string.artist_search_no_results, Toast.LENGTH_SHORT);
                 toast.show();

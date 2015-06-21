@@ -14,9 +14,10 @@ public class ArtistTop10Activity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_top10);
         ActionBar actionBar = getSupportActionBar();
-
-        String artistName = getIntent().getStringExtra("artistName");
-        actionBar.setSubtitle(artistName);
+        if (actionBar!=null) {
+            String artistName = getIntent().getStringExtra("artistName");
+            actionBar.setSubtitle(artistName);
+        }
     }
 
 

@@ -9,13 +9,19 @@
     android:orientation="vertical"
     tools:context=".MainActivityFragment">
 
-    <EditText
+    <android.support.v7.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchview_artist_search"
+        android:layout_gravity="center" />
+
+    <!--<EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edittext_artist_search"
         android:hint="@string/artist_search_hint"
         android:singleLine="true"
-        android:imeOptions="actionSearch" />
+        android:imeOptions="actionSearch" />-->
 
     <ListView
         android:id="@+id/listview_artists"

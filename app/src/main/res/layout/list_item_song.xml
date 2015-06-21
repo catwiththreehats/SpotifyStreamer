@@ -8,6 +8,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:contentDescription="@string/track_image_description"
         android:id="@+id/listitem_top10_imageview" />
 
     <LinearLayout
@@ -22,7 +23,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Some Text"
+            android:text="@string/dummy_text"
             android:id="@+id/listitem_top10_album_textView" />
         <TextView
             android:layout_width="fill_parent"
@@ -30,7 +31,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Some Text"
+            android:text="@string/dummy_text"
             android:id="@+id/listitem_top10_song_textView" />
     </LinearLayout>
 </LinearLayout>

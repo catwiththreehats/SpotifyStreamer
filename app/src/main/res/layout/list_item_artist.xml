@@ -8,6 +8,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:contentDescription="@string/artist_image_description"
         android:id="@+id/listitem_artist_imageview" />
 
     <TextView
@@ -16,7 +17,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
+        android:text="@string/dummy_text"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Some Text"
         android:id="@+id/listitem_artist_textView" />
 </LinearLayout>

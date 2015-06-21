@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.fivedimensionlabs.android.spotifystreamer.adapters.TrackCustomAdapter;
+import com.fivedimensionlabs.android.spotifystreamer.helpers.NetworkUtility;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,8 +51,14 @@ public class ArtistTop10ActivityFragment extends Fragment {
         ListView listView = (ListView)rootView.findViewById(R.id.listview_artists_top10);
         listView.setAdapter(topTenAdapter);
 
-        if (artistId!=lastArtistId) {
-            new FetchTop10ResultsTask().execute(artistId);
+        if (!artistId.equals(lastArtistId)) {
+            if (NetworkUtility.hasNetworkConnectivity(getActivity())) {
+                new FetchTop10ResultsTask().execute(artistId);
+            } else {
+                Toast.makeText(getActivity(), getResources().getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show();
+                topTenAdapter.clear();
+                lastArtistId = "";
+            }
             lastArtistId=artistId;
         }
         return rootView;
